@@ -10,7 +10,8 @@ function toggle() {
 <template>
   <button @click="toggle">Toggle Message</button>
 
-  <p v-if="isOpen">Hello Vue!</p>
+  <p v-show="isOpen">Hello Vue!</p>
+  <!-- <p v-show="isOpen">Goodbye Vue!</p> -->
 </template>
 
 <style scoped></style>
