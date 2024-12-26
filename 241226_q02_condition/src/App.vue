@@ -9,9 +9,21 @@ function toggle() {
 
 <template>
   <button @click="toggle">Toggle Message</button>
-
-  <p v-show="isOpen">Hello Vue!</p>
+  <Transition>
+    <p v-show="isOpen">Hello Vue!</p>
+  </Transition>
+  <p>他のテキスト</p>
   <!-- <p v-show="isOpen">Goodbye Vue!</p> -->
 </template>
 
-<style scoped></style>
+<style scoped>
+.v-enter-active,
+.v-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
+}
+</style>
