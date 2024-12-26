@@ -1,14 +1,16 @@
 <script setup>
+// 必要な情報を読み込む
 import HelloWorld from './components/HelloWorld.vue'
 import TheWelcome from './components/TheWelcome.vue'
 </script>
 
+<!-- HTMLの設定をする -->
 <template>
   <header>
     <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
 
     <div class="wrapper">
-      <HelloWorld msg="You did it!" />
+      <HelloWorld msg="You did it! Yeah" />
     </div>
   </header>
 
@@ -17,6 +19,7 @@ import TheWelcome from './components/TheWelcome.vue'
   </main>
 </template>
 
+<!-- CSSを設定している -->
 <style scoped>
 header {
   line-height: 1.5;
