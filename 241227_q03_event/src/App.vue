@@ -7,6 +7,10 @@ function increment() {
   count.value++;
 }
 function decrement() {
+  // 0以下にならないようにする
+  if (count.value <= 0) {
+    return;
+  }
   count.value--;
 }
 function reset() {
@@ -16,6 +20,7 @@ function reset() {
 
 <template>
   <p>現在のカウント数 {{ count }}</p>
+  <p v-show="count >= 10">やったね！今10以上です！</p>
   <ul>
     <li>
       <button @click="increment">increment counter</button>
