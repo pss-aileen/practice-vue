@@ -5,11 +5,48 @@ const gender = ref(null)
 const hobbies = ref([])
 const favoriteFruit = ref(null)
 
-// 名前の必須入力チェック
-// 名前の文字数2文字以上10文字以下
-// 趣味の選択肢を1つ選ぶ
-// 送信ボタンを押すと、コンソールに情報が表示されるようにする
-// プレースホルダーの設定
+const errorMessage = ref('フォームを入力してください。')
+
+function submit(e) {
+  e.preventDefault()
+  if (!name.value) {
+    console.log('名前を入力してください。')
+    errorMessage.value = '名前を入力してください。'
+    return
+  }
+
+  if (name.value.split('').length < 3) {
+    console.log('名前は最低3文字必要です。')
+    errorMessage.value = '名前は最低3文字必要です。'
+    return
+  }
+
+  if (!gender.value) {
+    console.log('性別を選んでください。')
+    errorMessage.value = '性別を選んでください。'
+    return
+  }
+
+  if (hobbies.value.length === 0) {
+    console.log('趣味を選んでください。')
+    errorMessage.value = '趣味を選んでください。'
+    return
+  }
+
+  if (!favoriteFruit.value) {
+    console.log('好きなフルーツを選んでください。')
+    errorMessage.value = '好きなフルーツを選んでください。'
+    return
+  }
+
+  console.log('送信完了')
+  errorMessage.value = '送信完了'
+
+  console.log('name: ', name.value)
+  console.log('gender: ', gender.value)
+  console.log('hobbies: ', hobbies.value)
+  console.log('favoriteFruit: ', favoriteFruit.value)
+}
 </script>
 <template>
   <!-- labelのforとinputのidが同じである必要がある -->
@@ -26,73 +63,89 @@ const favoriteFruit = ref(null)
     <section>
       <h2>入力フォーム</h2>
 
-      <div>
-        <label for="name" class="title">Name: </label>
-        <input type="text" id="name" v-model="name" />
-      </div>
+      <p>{{ errorMessage }}</p>
 
-      <fieldset>
-        <legend class="title">gender:</legend>
+      <form>
+        <div>
+          <label for="name" class="title">Name: </label>
+          <input type="text" id="name" v-model="name" required />
+        </div>
 
-        <ul>
-          <li>
-            <input type="radio" name="gender" id="man" value="man" v-model="gender" />
-            <label for="man">man</label>
-          </li>
-          <li>
-            <input type="radio" name="gender" id="woman" value="woman" v-model="gender" />
-            <label for="woman">woman</label>
-          </li>
-        </ul>
-      </fieldset>
+        <fieldset>
+          <legend class="title">gender:</legend>
 
-      <fieldset>
-        <legend class="title">Hobbies:</legend>
+          <ul>
+            <li>
+              <input type="radio" name="gender" id="man" value="man" v-model="gender" required />
+              <label for="man">man</label>
+            </li>
+            <li>
+              <input
+                type="radio"
+                name="gender"
+                id="woman"
+                value="woman"
+                v-model="gender"
+                required
+              />
+              <label for="woman">woman</label>
+            </li>
+          </ul>
+        </fieldset>
 
-        <ul>
-          <li>
-            <input
-              type="checkbox"
-              name="hobbies"
-              id="reading"
-              value="reading books"
-              v-model="hobbies"
-            />
-            <label for="reading">reading books</label>
-          </li>
-          <li>
-            <input
-              type="checkbox"
-              name="hobbies"
-              id="sports"
-              value="playing sports"
-              v-model="hobbies"
-            />
-            <label for="sports">playing sports</label>
-          </li>
-          <li>
-            <input
-              type="checkbox"
-              name="hobbies"
-              id="movie"
-              value="watching movies"
-              v-model="hobbies"
-            />
-            <label for="movie">watching movies</label>
-          </li>
-        </ul>
-      </fieldset>
+        <fieldset>
+          <legend class="title">Hobbies:</legend>
 
-      <div>
-        <label for="favoriteFruit" class="title">Favorite fruit: </label>
+          <ul>
+            <li>
+              <input
+                type="checkbox"
+                name="hobbies"
+                id="reading"
+                value="reading books"
+                v-model="hobbies"
+                required
+              />
+              <label for="reading">reading books</label>
+            </li>
+            <li>
+              <input
+                type="checkbox"
+                name="hobbies"
+                id="sports"
+                value="playing sports"
+                v-model="hobbies"
+                required
+              />
+              <label for="sports">playing sports</label>
+            </li>
+            <li>
+              <input
+                type="checkbox"
+                name="hobbies"
+                id="movie"
+                value="watching movies"
+                v-model="hobbies"
+                required
+              />
+              <label for="movie">watching movies</label>
+            </li>
+          </ul>
+        </fieldset>
 
-        <select id="favoriteFruit" v-model="favoriteFruit">
-          <option disabled value="">- - - - なし - - - -</option>
-          <option value="apple">りんご</option>
-          <option value="banana">ばなな</option>
-          <option value="grape">ぶどう</option>
-        </select>
-      </div>
+        <div>
+          <label for="favoriteFruit" class="title">Favorite fruit: </label>
+
+          <select id="favoriteFruit" v-model="favoriteFruit" required>
+            <option disabled value="">- - - - なし - - - -</option>
+            <option value="apple">りんご</option>
+            <option value="banana">ばなな</option>
+            <option value="grape">ぶどう</option>
+          </select>
+        </div>
+
+        <button @click="submit">submit</button>
+      </form>
     </section>
   </div>
 </template>
@@ -132,7 +185,7 @@ ul {
   justify-content: space-between;
 
   section:nth-child(1) {
-    flex: 2;
+    flex: 1;
 
     & > * + * {
       margin-top: 16px;
