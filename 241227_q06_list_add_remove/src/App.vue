@@ -5,13 +5,17 @@ const input = ref(null);
 
 function addTask(e) {
   e.preventDefault();
-  tasks.value.push(input.value);
+
+  if (!input.value || input.value.trim() === '') {
+    alert('タスクを入力してください');
+    return;
+  }
+  tasks.value.push(input.value.trim());
   input.value = null;
 }
 
-function removeTask(e) {
-  const parentNode = e.target.parentNode;
-  parentNode.remove();
+function removeTask(index) {
+  tasks.value.splice(index, 1);
 }
 </script>
 
@@ -30,7 +34,7 @@ function removeTask(e) {
     <li v-for="(task, index) in tasks" :key="index">
       {{ task }}
 
-      <button @click="removeTask">x</button>
+      <button @click="removeTask(index)">x</button>
     </li>
   </ul>
 </template>
