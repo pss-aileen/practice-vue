@@ -1,13 +1,16 @@
 <script setup lang="ts">
-const props = defineProps({
-  message: String,
-});
+// const props = defineProps({
+//   message: String,
+// });
 
-const emit = defineEmits(['deleteMessage']);
+const props = defineProps<{
+  message: string;
+}>();
+const emit = defineEmits(['delete-message']);
 
 function handleClick() {
-  emit('deleteMessage');
-  console.log('emit delete Message');
+  emit('delete-message');
+  console.log('Event emitted: delete-message');
 }
 </script>
 <template>
