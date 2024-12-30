@@ -4,19 +4,22 @@ import ChildComponent from './components/ChildComponent.vue';
 
 const count = ref(0);
 
-// 4.結果的にここでカウントが追加される
+// 3. 子コンポーネントのイベント "increment" を受け取り、カウントを増やす関数
 function addCount() {
   count.value++;
 }
 </script>
 
 <template>
+  <!-- 親コンポーネントのカウント表示 -->
   <h2>Count: {{ count }}</h2>
 
+  <!-- 親コンポーネント自身のボタン -->
   <p>
     <button @click="addCount">親コンポーネント追加</button>
   </p>
-  <!-- 3.子コンポーネントのincrementがクリック？放出されたら、addCountを発火する -->
+
+  <!-- 4. 子コンポーネントが "increment" を発火したら、addCount を実行 -->
   <ChildComponent @increment="addCount" />
 </template>
 
