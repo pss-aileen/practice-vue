@@ -1,5 +1,9 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
+
+const props = defineProps<{
+  popedItem: string | null;
+}>();
 
 const input = ref('');
 
@@ -28,6 +32,13 @@ function remove(e: Event) {
   e.preventDefault();
   emit('remove');
 }
+
+watch(
+  () => props.popedItem,
+  (newVal) => {
+    message.value = `「${newVal}」 が削除されました！`;
+  }
+);
 </script>
 
 <template>
