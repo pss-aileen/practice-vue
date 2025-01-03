@@ -3,7 +3,9 @@ import { computed, ref, type Ref } from 'vue'
 
 const taskInput: Ref<string> = ref('')
 const message: Ref<string> = ref('')
-
+const taskInputCount = computed(() => {
+  return taskInput.value.length
+})
 const validatedInput = computed(() => {
   return taskInput.value.trim()
 })
@@ -96,12 +98,17 @@ function editTask(id: number, title: string) {
   <section class="wrapper">
     <h1>TASKS LIST</h1>
 
-    <form>
-      <input type="text" v-model="taskInput" />
-      <button @click="addTask">add</button>
-    </form>
+    <section class="add-task">
+      <h2>タスクを追加する</h2>
+      <form>
+        <!-- <input type="text" v-model="taskInput" /> -->
+        <textarea v-model="taskInput"></textarea>
+        <button @click="addTask">add</button>
+      </form>
+      <p>{{ taskInputCount }} / 30 文字</p>
+    </section>
 
-    <p>message: {{ message }}</p>
+    <p class="message">{{ message }}</p>
 
     <ul v-if="tasks.length !== 0">
       <li v-for="task in tasks" :key="task.id">
@@ -110,6 +117,7 @@ function editTask(id: number, title: string) {
           v-model="task.isCompleted"
           @change="changeCompleted(task.isCompleted)"
         />
+
         <span>
           {{ task.title }}
         </span>
@@ -126,26 +134,51 @@ function editTask(id: number, title: string) {
 <style scoped>
 .wrapper {
   max-width: 400px;
-  margin: 0 auto;
+  margin: 32px auto;
 
-  form {
-    display: flex;
-    gap: 4px;
+  h1 {
+  }
 
-    input {
-      flex: 1;
-      padding: 4px;
+  .add-task {
+    margin-top: 16px;
+    h2 {
+      font-size: 14px;
     }
 
-    button {
-      width: 80px;
-      padding: 4px;
+    p {
+      text-align: right;
+      font-size: 12px;
     }
+
+    form {
+      display: flex;
+      gap: 4px;
+      margin-top: 8px;
+
+      textarea {
+        flex: 1;
+        padding: 4px;
+      }
+
+      button {
+        width: 80px;
+        padding: 4px;
+      }
+    }
+  }
+
+  .message {
+    background: #eee;
+
+    padding: 16px;
+    margin-top: 16px;
+    border-radius: 4px;
   }
 
   ul {
     list-style: none;
     padding: 0;
+    margin-top: 24px;
     li {
       display: flex;
       gap: 8px;
