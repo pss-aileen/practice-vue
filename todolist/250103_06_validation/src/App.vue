@@ -1,8 +1,11 @@
 <script setup lang="ts">
-import { ref, type Ref } from 'vue'
+import { computed, ref, type Ref } from 'vue'
 
 const taskInput: Ref<string> = ref('')
 
+const validatedInput = computed(() => {
+  return taskInput.value.trim()
+})
 type taskType = {
   id: number
   title: string
@@ -13,7 +16,6 @@ const tasks: Ref<taskType[]> = ref([])
 
 const localStorageValue = localStorage.getItem('myTodo')
 if (localStorageValue) {
-  // console.log(JSON.parse(localStorageValue))
   tasks.value = JSON.parse(localStorageValue)
 }
 
@@ -27,9 +29,19 @@ function updateLocalStorage() {
 
 function addTask(e: Event) {
   e.preventDefault()
+  console.log(validatedInput.value.length)
+
+  if (validatedInput.value.length <= 3) {
+    console.log('文字数が足りません')
+    return
+  } else if (validatedInput.value.length > 30) {
+    console.log('文字数が30文字を超えています。')
+    return
+  }
+
   const task: taskType = {
     id: new Date().getTime(),
-    title: taskInput.value,
+    title: validatedInput.value,
     isCompleted: false,
   }
   tasks.value.push(task)
@@ -91,9 +103,13 @@ function editTask(id: number) {
           v-model="task.isCompleted"
           @change="changeCompleted(task.isCompleted)"
         />
-        {{ task.title }}
-        <button @click="editTask(task.id)">✍️</button>
-        <button @click="deleteTask(task.id)">🗑️</button>
+        <span>
+          {{ task.title }}
+        </span>
+        <div>
+          <button @click="editTask(task.id)">✍️</button>
+          <button @click="deleteTask(task.id)">🗑️</button>
+        </div>
       </li>
     </ul>
     <p v-else>There is no task.</p>
@@ -117,6 +133,32 @@ function editTask(id: number) {
     button {
       width: 80px;
       padding: 4px;
+    }
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+    li {
+      display: flex;
+      gap: 8px;
+      align-items: start;
+
+      span {
+        flex: 1;
+      }
+
+      div {
+        width: fit-content;
+        margin-left: auto;
+        margin-right: 0;
+        display: flex;
+        gap: 4px;
+      }
+    }
+
+    li + li {
+      margin-top: 8px;
     }
   }
 }
