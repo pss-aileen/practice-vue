@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { computed, ref, type Ref } from 'vue'
 
+const filter: Ref<string> = ref('all')
+
 const taskInput: Ref<string> = ref('')
 const message: Ref<string> = ref('')
 const taskInputCount = computed(() => {
@@ -92,6 +94,21 @@ function editTask(id: number, title: string) {
     message.value = `「${title}」は変更されませんでした`
   }
 }
+
+const filteredTasks = computed(() => {
+  if (filter.value === 'completed') {
+    return tasks.value.filter((task) => {
+      return task.isCompleted === true
+    })
+  }
+  if (filter.value === 'uncompleted') {
+    return tasks.value.filter((task) => {
+      return task.isCompleted === false
+    })
+  }
+
+  return tasks.value
+})
 </script>
 
 <template>
@@ -109,8 +126,17 @@ function editTask(id: number, title: string) {
 
     <p class="message" v-if="message">{{ message }}</p>
 
-    <ul v-if="tasks.length !== 0">
-      <li v-for="task in tasks" :key="task.id">
+    <fieldset>
+      <legend>絞りこみ</legend>
+      <select name="" id="" v-model="filter">
+        <option value="all" selected>all</option>
+        <option value="completed">completed</option>
+        <option value="uncompleted">uncompleted</option>
+      </select>
+    </fieldset>
+
+    <ul v-if="filteredTasks.length !== 0">
+      <li v-for="task in filteredTasks" :key="task.id">
         <input
           type="checkbox"
           v-model="task.isCompleted"
