@@ -100,15 +100,14 @@ function editTask(id: number, title: string) {
 
     <section class="add-task">
       <h2>タスクを追加する</h2>
-      <form>
-        <!-- <input type="text" v-model="taskInput" /> -->
-        <textarea v-model="taskInput"></textarea>
-        <button @click="addTask">add</button>
+      <form @submit="addTask">
+        <textarea v-model="taskInput" @keydown.meta.enter.exact.prevent="addTask"></textarea>
+        <button type="submit">add</button>
       </form>
       <p>{{ taskInputCount }} / 30 文字</p>
     </section>
 
-    <p class="message">{{ message }}</p>
+    <p class="message" v-if="message">{{ message }}</p>
 
     <ul v-if="tasks.length !== 0">
       <li v-for="task in tasks" :key="task.id">
