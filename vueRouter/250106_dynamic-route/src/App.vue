@@ -8,6 +8,7 @@ import { RouterView } from 'vue-router';
     <RouterLink to="/user/1">User1</RouterLink>
     <RouterLink to="/user/2">User2</RouterLink>
     <RouterLink to="/user/3">User3</RouterLink>
+    <RouterLink to="/user/4">User4</RouterLink>
   </nav>
   <main>
     <RouterView />
