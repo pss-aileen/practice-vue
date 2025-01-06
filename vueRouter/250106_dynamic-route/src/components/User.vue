@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { computed } from 'vue';
 
 import allUser from './../data.json';
 import { useRoute } from 'vue-router';
