@@ -2,15 +2,18 @@
 import { computed, ref, type Ref } from 'vue'
 
 const filter: Ref<string> = ref('all')
-
-const taskInput: Ref<string> = ref('')
 const message: Ref<string> = ref('')
+
+// form input
+const taskInput: Ref<string> = ref('')
 const taskInputCount = computed(() => {
   return taskInput.value.length
 })
 const validatedInput = computed(() => {
   return taskInput.value.trim()
 })
+
+// tasks
 type taskType = {
   id: number
   title: string
@@ -24,6 +27,7 @@ if (localStorageValue) {
   tasks.value = JSON.parse(localStorageValue)
 }
 
+// functions
 function updateLocalStorage() {
   localStorage.setItem('myTodo', JSON.stringify(tasks.value))
   const localStorageValue = localStorage.getItem('myTodo')
@@ -52,7 +56,6 @@ function addTask(e: Event) {
   tasks.value.push(task)
   message.value = `「${task.title}」を追加しました。`
   taskInput.value = ''
-  // console.log(tasks.value)
   updateLocalStorage()
 }
 
@@ -70,7 +73,6 @@ function changeCompleted(boolean: boolean) {
 
 function editTask(id: number, title: string) {
   const newTaskTitle: string | null = prompt('Edit here')
-  console.log(newTaskTitle)
 
   if (newTaskTitle !== '') {
     const newTasks = tasks.value.map((task) => {
@@ -79,10 +81,8 @@ function editTask(id: number, title: string) {
           ...task,
           title: newTaskTitle as string,
         }
-
         return newTask
       }
-
       return task
     })
 
@@ -95,6 +95,7 @@ function editTask(id: number, title: string) {
   }
 }
 
+// 出力されるタスク
 const filteredTasks = computed(() => {
   if (filter.value === 'completed') {
     return tasks.value.filter((task) => {
