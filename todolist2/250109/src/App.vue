@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { ref, type Ref } from 'vue';
+import { nextTick, ref, type Ref } from 'vue';
 
 /*
   基本のTODO作成
   - 追加: done
   - 表示: done
-  - 削除
+  - 削除: done
   - 編集
   - ローカルストレージ保存
 */
@@ -17,6 +17,7 @@ const inputTitle = ref('');
 type TodoType = {
   id: number;
   title: string;
+  isEditing: boolean;
 };
 
 // Todosの準備
@@ -27,6 +28,7 @@ function addTodo() {
   const todo: TodoType = {
     id: new Date().getTime(),
     title: inputTitle.value,
+    isEditing: false,
   };
 
   todos.value.push(todo);
@@ -35,10 +37,28 @@ function addTodo() {
   console.table(todos.value);
 }
 
+// 削除機能
 function deleteTodo(id: number) {
   todos.value = todos.value.filter((todo) => todo.id !== id);
 
   console.table(todos.value);
+}
+
+// 編集機能
+function editTodo(id: number) {
+  // editTodoをおすと、入力欄に変わる
+  // まず、フォーカスされるようにする、んでフォーカスがはずれたら保存されるようにする
+  todos.value = todos.value.map((todo) => {
+    if (todo.id === id) {
+      todo.isEditing = true;
+    }
+    return todo;
+  });
+  console.log(id);
+
+  nextTick(() => {
+    // if()
+  })
 }
 </script>
 
@@ -53,7 +73,10 @@ function deleteTodo(id: number) {
 
     <ul v-if="todos.length !== 0">
       <li v-for="todo in todos" :key="todo.id">
-        {{ todo.title }}
+        <span @click="editTodo(todo.id)" v-if="!todo.isEditing">
+          {{ todo.title }}
+        </span>
+        <input type="text" :value="todo.title" v-else />
         <button @click="deleteTodo(todo.id)">❌</button>
       </li>
     </ul>
