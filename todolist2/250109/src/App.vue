@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { nextTick, ref, type Ref } from 'vue';
+import { ref, type Ref } from 'vue';
 
 /*
   基本のTODO作成
@@ -54,11 +54,17 @@ function editTodo(id: number) {
     }
     return todo;
   });
-  console.log(id);
 
-  nextTick(() => {
-    // if()
-  })
+  console.log(id);
+}
+
+function editFinish(id: number) {
+  todos.value = todos.value.map((todo) => {
+    if (todo.id === id) {
+      todo.isEditing = false;
+    }
+    return todo;
+  });
 }
 </script>
 
@@ -76,7 +82,7 @@ function editTodo(id: number) {
         <span @click="editTodo(todo.id)" v-if="!todo.isEditing">
           {{ todo.title }}
         </span>
-        <input type="text" :value="todo.title" v-else />
+        <input type="text" :value="todo.title" v-else autofocus @blur="editFinish(todo.id)" />
         <button @click="deleteTodo(todo.id)">❌</button>
       </li>
     </ul>
