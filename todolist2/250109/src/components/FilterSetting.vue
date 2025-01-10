@@ -15,12 +15,22 @@ function handleClick(filterName: currentFilterType) {
 </script>
 
 <template>
-  <section>
+  <section class="filter">
     <h2>Filter</h2>
-    <button @click="handleClick('completed')" :disabled="props.currentFilter === 'completed'">完了のみ</button>
-    <button @click="handleClick('incompleted')" :disabled="props.currentFilter === 'incompleted'">未完了のみ</button>
-    <button @click="handleClick('all')" :disabled="props.currentFilter === 'all'">全部</button>
+
+    <ul>
+      <li><button @click="handleClick('all')" :disabled="props.currentFilter === 'all'">全部</button></li>
+      <li><button @click="handleClick('completed')" :disabled="props.currentFilter === 'completed'">完了のみ</button></li>
+      <li><button @click="handleClick('incompleted')" :disabled="props.currentFilter === 'incompleted'">未完了のみ</button></li>
+    </ul>
   </section>
 </template>
 
-<style scoped></style>
+<style scoped>
+.filter {
+  ul {
+    list-style: none;
+    padding: 0;
+  }
+}
+</style>

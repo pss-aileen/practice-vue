@@ -3,7 +3,7 @@ import { computed, ref, type Ref } from 'vue';
 import InputForm from './components/InputForm.vue';
 import FilterSetting from './components/FilterSetting.vue';
 import TodoList from './components/TodoList.vue';
-import type { currentFilterType, TodoType } from './types';
+import type { categoryType, currentFilterType, TodoType } from './types';
 
 // Todosの準備
 const todos: Ref<TodoType[]> = ref([]);
@@ -14,11 +14,12 @@ if (localStorageValue) {
 }
 
 // 追加機能
-function addTodo(title: string) {
+function addTodo(title: string, category: categoryType) {
   const todo: TodoType = {
     id: new Date().getTime(),
     title: title,
     isCompleted: false,
+    category: category,
   };
 
   todos.value.push(todo);
@@ -114,7 +115,7 @@ const filteredTodos = computed(() => {
     margin-top: 32px;
 
     main {
-      flex: 1;
+      flex: 3;
 
       & > * + * {
         margin-top: 32px;
@@ -122,6 +123,7 @@ const filteredTodos = computed(() => {
     }
 
     aside {
+      flex: 1;
     }
   }
 }
