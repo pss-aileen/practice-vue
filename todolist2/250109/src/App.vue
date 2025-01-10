@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, type Ref, type VNodeRef } from 'vue';
+import { ref, type Ref } from 'vue';
 
 /*
   基本のTODO作成
@@ -17,7 +17,6 @@ const inputTitle = ref('');
 type TodoType = {
   id: number;
   title: string;
-  isEditing: boolean;
 };
 
 // Todosの準備
@@ -28,7 +27,6 @@ function addTodo() {
   const todo: TodoType = {
     id: new Date().getTime(),
     title: inputTitle.value,
-    isEditing: false,
   };
 
   todos.value.push(todo);
@@ -46,25 +44,23 @@ function deleteTodo(id: number) {
 
 // 編集機能
 function editTodo(id: number) {
-  // editTodoをおすと、入力欄に変わる
-  // まず、フォーカスされるようにする、んでフォーカスがはずれたら保存されるようにする
-  todos.value = todos.value.map((todo) => {
-    if (todo.id === id) {
-      todo.isEditing = true;
-    }
-    return todo;
-  });
+  const currentTodo = todos.value.filter((todo) => {
+    return todo.id === id;
+  })[0];
 
-  console.log(id);
-}
+  if (currentTodo) {
+    const newTitle = prompt('Edit title', currentTodo.title);
 
-function editFinish(id: number) {
-  todos.value = todos.value.map((todo) => {
-    if (todo.id === id) {
-      todo.isEditing = false;
+    if (currentTodo.title !== newTitle) {
+      todos.value = todos.value.map((todo) => {
+        if (todo.id === id && newTitle) {
+          todo.title = newTitle;
+        }
+        return todo;
+      });
+      console.table(todos.value);
     }
-    return todo;
-  });
+  }
 }
 </script>
 
@@ -79,23 +75,8 @@ function editFinish(id: number) {
 
     <ul v-if="todos.length !== 0">
       <li v-for="todo in todos" :key="todo.id">
-        <span @click="editTodo(todo.id)" v-if="!todo.isEditing">
-          {{ todo.title }}
-        </span>
-        <input
-          type="text"
-          :value="todo.title"
-          v-else
-          @blur="editFinish(todo.id)"
-          :ref="
-            (el) => {
-              console.log(el);
-              if (el) {
-                el.focus();
-              }
-            }
-          "
-        />
+        {{ todo.title }}
+        <button @click="editTodo(todo.id)">✍️</button>
         <button @click="deleteTodo(todo.id)">❌</button>
       </li>
     </ul>
