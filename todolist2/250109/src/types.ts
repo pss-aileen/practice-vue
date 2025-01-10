@@ -2,9 +2,12 @@ export type TodoType = {
   id: number;
   title: string;
   isCompleted: boolean;
-  category: categoryType;
+  categoryId: number;
 };
 
 export type currentFilterType = 'all' | 'incompleted' | 'completed';
 
-export type categoryType = 'work' | 'private';
+export type categoryType = {
+  id: number;
+  title: string;
+};

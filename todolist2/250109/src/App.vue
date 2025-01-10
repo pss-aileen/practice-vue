@@ -6,6 +6,10 @@ import TodoList from './components/TodoList.vue';
 import type { categoryType, currentFilterType, TodoType } from './types';
 import CategoryInput from './components/CategoryInput.vue';
 
+/* 
+  TODOS
+*/
+
 // Todosの準備
 const todos: Ref<TodoType[]> = ref([]);
 
@@ -15,12 +19,12 @@ if (localStorageValue) {
 }
 
 // 追加機能
-function addTodo(title: string, category: categoryType) {
+function addTodo(title: string, categoryId: number) {
   const todo: TodoType = {
     id: new Date().getTime(),
     title: title,
     isCompleted: false,
-    category: category,
+    categoryId: categoryId,
   };
 
   todos.value.push(todo);
@@ -69,6 +73,67 @@ function updateLocalStorage() {
   }
 }
 
+/* 
+  CATEGORIES
+*/
+
+const categories: Ref<categoryType[]> = ref([]);
+
+function addCategory(title: string) {
+  const category = {
+    id: new Date().getTime(),
+    title: title,
+  };
+  categories.value.push(category);
+  title = '';
+  console.table(categories.value);
+  updateCategoriesLocalStorage();
+}
+
+function deleteCategory(id: number) {
+  categories.value = categories.value.filter((category) => category.id !== id);
+
+  console.table(categories.value);
+  updateCategoriesLocalStorage();
+}
+
+function editCategory(id: number) {
+  const currentCategory = categories.value.filter((category) => {
+    return category.id === id;
+  })[0];
+
+  if (currentCategory) {
+    const newTitle = prompt('Edit title', currentCategory.title);
+
+    if (currentCategory.title !== newTitle) {
+      categories.value = categories.value.map((category) => {
+        if (category.id === id && newTitle) {
+          category.title = newTitle;
+        }
+        return category;
+      });
+      console.table(categories.value);
+      updateCategoriesLocalStorage();
+    }
+  }
+}
+
+const localStorageCategoriesValue = localStorage.getItem('myTodoCategories');
+if (localStorageCategoriesValue) {
+  categories.value = JSON.parse(localStorageCategoriesValue);
+}
+
+function updateCategoriesLocalStorage() {
+  localStorage.setItem('myTodoCategories', JSON.stringify(categories.value));
+  const localStorageCategoriesValue = localStorage.getItem('myTodoCategories');
+  if (localStorageCategoriesValue) {
+    console.log('updated: localStorage');
+    console.log(JSON.parse(localStorageCategoriesValue));
+  }
+}
+/* 
+  FILTER
+*/
 const currentFilter: Ref<currentFilterType> = ref('all');
 
 function updateCurrentFilter(filterName: currentFilterType) {
@@ -95,12 +160,12 @@ const filteredTodos = computed(() => {
 
     <div>
       <main>
-        <InputForm @add-todo="addTodo" />
-        <TodoList :todos="filteredTodos" @edit-todo="editTodo" @delete-todo="deleteTodo" @update-localstorage="updateLocalStorage" />
+        <InputForm @add-todo="addTodo" :categories="categories" />
+        <TodoList :todos="filteredTodos" :categories="categories" @edit-todo="editTodo" @delete-todo="deleteTodo" @update-localstorage="updateLocalStorage" />
       </main>
       <aside>
         <FilterSetting @update-current-filter="updateCurrentFilter" :current-filter="currentFilter" />
-        <CategoryInput />
+        <CategoryInput :categories="categories" @add-category="addCategory" @edit-category="editCategory" @delete-category="deleteCategory" @update-category="updateCategoriesLocalStorage" />
       </aside>
     </div>
   </section>

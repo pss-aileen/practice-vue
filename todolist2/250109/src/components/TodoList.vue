@@ -1,8 +1,10 @@
 <script setup lang="ts">
-import type { TodoType } from '../types';
+import { onMounted } from 'vue';
+import type { categoryType, TodoType } from '../types';
 
 const props = defineProps<{
   todos: TodoType[];
+  categories: categoryType[];
 }>();
 
 const emit = defineEmits<{
@@ -10,6 +12,10 @@ const emit = defineEmits<{
   (e: 'delete-todo', id: number): void;
   (e: 'update-localstorage'): void;
 }>();
+
+onMounted(() => {
+  console.log(props.categories[0].title);
+});
 </script>
 
 <template>
@@ -24,7 +30,7 @@ const emit = defineEmits<{
         </label>
         <section>
           <span>
-            {{ todo.category }}
+            {{ props.categories.find((item) => item.id === todo.categoryId)?.title }}
           </span>
           <button @click="() => emit('edit-todo', todo.id)">✍️</button>
           <button @click="() => emit('delete-todo', todo.id)">🗑️</button>
