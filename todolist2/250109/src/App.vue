@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, type Ref } from 'vue';
+import { ref, type Ref, type VNodeRef } from 'vue';
 
 /*
   基本のTODO作成
@@ -82,7 +82,20 @@ function editFinish(id: number) {
         <span @click="editTodo(todo.id)" v-if="!todo.isEditing">
           {{ todo.title }}
         </span>
-        <input type="text" :value="todo.title" v-else autofocus @blur="editFinish(todo.id)" />
+        <input
+          type="text"
+          :value="todo.title"
+          v-else
+          @blur="editFinish(todo.id)"
+          :ref="
+            (el) => {
+              console.log(el);
+              if (el) {
+                el.focus();
+              }
+            }
+          "
+        />
         <button @click="deleteTodo(todo.id)">❌</button>
       </li>
     </ul>
