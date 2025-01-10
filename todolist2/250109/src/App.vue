@@ -5,8 +5,6 @@ import FilterSetting from './components/FilterSetting.vue';
 import TodoList from './components/TodoList.vue';
 import type { currentFilterType, TodoType } from './types';
 
-// Todoの型
-
 // Todosの準備
 const todos: Ref<TodoType[]> = ref([]);
 
@@ -88,21 +86,43 @@ const filteredTodos = computed(() => {
 </script>
 
 <template>
-  <section>
-    <h1>TODO LIST</h1>
+  <section class="wrapper">
+    <header>
+      <h1>TODO LIST</h1>
+    </header>
 
-    <InputForm @add-todo="addTodo" />
-    <FilterSetting @update-current-filter="updateCurrentFilter" :current-filter="currentFilter" />
-    <TodoList :todos="filteredTodos" @edit-todo="editTodo" @delete-todo="deleteTodo" @update-localstorage="updateLocalStorage" />
+    <div>
+      <main>
+        <InputForm @add-todo="addTodo" />
+        <TodoList :todos="filteredTodos" @edit-todo="editTodo" @delete-todo="deleteTodo" @update-localstorage="updateLocalStorage" />
+      </main>
+      <aside>
+        <FilterSetting @update-current-filter="updateCurrentFilter" :current-filter="currentFilter" />
+      </aside>
+    </div>
   </section>
 </template>
 
 <style scoped>
-* {
-  box-sizing: border-box;
-}
-section {
-  max-width: 480px;
-  margin: 0 auto;
+.wrapper {
+  max-width: 800px;
+  margin: 32px auto;
+
+  & > div {
+    display: flex;
+    gap: 32px;
+    margin-top: 32px;
+
+    main {
+      flex: 1;
+
+      & > * + * {
+        margin-top: 32px;
+      }
+    }
+
+    aside {
+    }
+  }
 }
 </style>

@@ -6,15 +6,21 @@ const emit = defineEmits<{
 }>();
 
 const inputTitle: Ref<string> = ref('');
+
+function handleSubmit() {
+  emit('add-todo', inputTitle.value);
+  inputTitle.value = '';
+}
 </script>
 
 <template>
-  <div>
-    <form @submit.prevent="() => emit('add-todo', inputTitle)">
+  <section>
+    <h2>Add Todo</h2>
+    <form @submit.prevent="handleSubmit">
       <input type="text" v-model="inputTitle" />
       <button>add</button>
     </form>
-  </div>
+  </section>
 </template>
 
 <style scoped>

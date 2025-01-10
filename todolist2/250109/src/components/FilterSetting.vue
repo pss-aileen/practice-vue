@@ -16,7 +16,7 @@ function handleClick(filterName: currentFilterType) {
 
 <template>
   <section>
-    <h2>filter</h2>
+    <h2>Filter</h2>
     <button @click="handleClick('completed')" :disabled="props.currentFilter === 'completed'">完了のみ</button>
     <button @click="handleClick('incompleted')" :disabled="props.currentFilter === 'incompleted'">未完了のみ</button>
     <button @click="handleClick('all')" :disabled="props.currentFilter === 'all'">全部</button>
