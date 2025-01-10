@@ -1,17 +1,8 @@
 <script setup lang="ts">
-import { computed, ref, watch, type Ref } from 'vue';
-
-/*
-  基本のTODO作成
-  - 追加: done
-  - 表示: done
-  - 削除: done
-  - 編集
-  - ローカルストレージ保存
-*/
-
-// todoのtitleの準備
-const inputTitle = ref('');
+import { computed, ref, type Ref } from 'vue';
+import InputForm from './components/InputForm.vue';
+import FilterSetting from './components/FilterSetting.vue';
+import TodoList from './components/TodoList.vue';
 
 // Todoの型
 type TodoType = {
@@ -29,15 +20,14 @@ if (localStorageValue) {
 }
 
 // 追加機能
-function addTodo() {
+function addTodo(title: string) {
   const todo: TodoType = {
     id: new Date().getTime(),
-    title: inputTitle.value,
+    title: title,
     isCompleted: false,
   };
 
   todos.value.push(todo);
-  inputTitle.value = '';
 
   console.table(todos.value);
   updateLocalStorage();
@@ -78,11 +68,16 @@ function updateLocalStorage() {
   localStorage.setItem('myTodo', JSON.stringify(todos.value));
   const localStorageValue = localStorage.getItem('myTodo');
   if (localStorageValue) {
+    console.log('updated: localStorage');
     console.log(JSON.parse(localStorageValue));
   }
 }
 
 const currentFilter: Ref<'all' | 'incompleted' | 'completed'> = ref('all');
+
+function updateCurrentFilter(filterName: 'all' | 'incompleted' | 'completed') {
+  currentFilter.value = filterName;
+}
 
 const filteredTodos = computed(() => {
   if (currentFilter.value === 'incompleted') {
@@ -100,34 +95,9 @@ const filteredTodos = computed(() => {
   <section>
     <h1>TODO LIST</h1>
 
-    <form @submit.prevent="addTodo">
-      <input type="text" v-model="inputTitle" />
-      <button>add</button>
-    </form>
-
-    <section>
-      <h2>setting</h2>
-      <button @click="() => (currentFilter = 'completed')" :disabled="currentFilter === 'completed'">完了のみ</button>
-      <button @click="() => (currentFilter = 'incompleted')" :disabled="currentFilter === 'incompleted'">未完了のみ</button>
-      <button @click="() => (currentFilter = 'all')" :disabled="currentFilter === 'all'">全部</button>
-    </section>
-
-    <section>
-      <h2>todos</h2>
-
-      <ul v-if="filteredTodos.length !== 0">
-        <li v-for="todo in filteredTodos" :key="todo.id">
-          <label>
-            <input type="checkbox" v-model="todo.isCompleted" @change="() => updateLocalStorage()" />
-            {{ todo.title }}
-          </label>
-          <section>
-            <button @click="editTodo(todo.id)">✍️</button>
-            <button @click="deleteTodo(todo.id)">❌</button>
-          </section>
-        </li>
-      </ul>
-    </section>
+    <InputForm @add-todo="addTodo" />
+    <FilterSetting @update-current-filter="updateCurrentFilter" :current-filter="currentFilter" />
+    <TodoList :todos="filteredTodos" @edit-todo="editTodo" @delete-todo="deleteTodo" @update-localstorage="updateLocalStorage" />
   </section>
 </template>
 
@@ -138,34 +108,5 @@ const filteredTodos = computed(() => {
 section {
   max-width: 480px;
   margin: 0 auto;
-
-  input {
-    padding: 4px;
-  }
-
-  form {
-    input {
-      width: 100%;
-    }
-
-    button {
-    }
-  }
-
-  ul {
-    list-style: none;
-    padding: 0;
-
-    li + li {
-      margin-top: 8px;
-    }
-
-    li {
-      display: flex;
-      label {
-        flex: 1;
-      }
-    }
-  }
 }
 </style>
