@@ -6,16 +6,10 @@ const emit = defineEmits<{
 }>();
 
 const inputTitle: Ref<string> = ref('');
-
-// function handleClick() {
-//   emit('add-todo', inputTitle.value);
-//   inputTitle.value = '';
-// }
 </script>
 
 <template>
   <div>
-    <!-- <form @submit.prevent="addTodo"> -->
     <form @submit.prevent="() => emit('add-todo', inputTitle)">
       <input type="text" v-model="inputTitle" />
       <button>add</button>

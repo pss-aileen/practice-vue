@@ -1,13 +1,15 @@
 <script setup lang="ts">
+import type { currentFilterType } from '../types';
+
 const props = defineProps<{
-  currentFilter: 'all' | 'incompleted' | 'completed';
+  currentFilter: currentFilterType;
 }>();
 
 const emit = defineEmits<{
-  (e: 'update-current-filter', filterName: 'all' | 'incompleted' | 'completed'): void;
+  (e: 'update-current-filter', filterName: currentFilterType): void;
 }>();
 
-function handleClick(filterName: 'all' | 'incompleted' | 'completed') {
+function handleClick(filterName: currentFilterType) {
   emit('update-current-filter', filterName);
 }
 </script>

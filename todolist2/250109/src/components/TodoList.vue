@@ -1,9 +1,5 @@
 <script setup lang="ts">
-type TodoType = {
-  id: number;
-  title: string;
-  isCompleted: boolean;
-};
+import type { TodoType } from '../types';
 
 const props = defineProps<{
   todos: TodoType[];

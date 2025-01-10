@@ -3,13 +3,9 @@ import { computed, ref, type Ref } from 'vue';
 import InputForm from './components/InputForm.vue';
 import FilterSetting from './components/FilterSetting.vue';
 import TodoList from './components/TodoList.vue';
+import type { currentFilterType, TodoType } from './types';
 
 // Todoの型
-type TodoType = {
-  id: number;
-  title: string;
-  isCompleted: boolean;
-};
 
 // Todosの準備
 const todos: Ref<TodoType[]> = ref([]);
@@ -73,9 +69,9 @@ function updateLocalStorage() {
   }
 }
 
-const currentFilter: Ref<'all' | 'incompleted' | 'completed'> = ref('all');
+const currentFilter: Ref<currentFilterType> = ref('all');
 
-function updateCurrentFilter(filterName: 'all' | 'incompleted' | 'completed') {
+function updateCurrentFilter(filterName: currentFilterType) {
   currentFilter.value = filterName;
 }
 
