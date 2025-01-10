@@ -121,8 +121,10 @@ const filteredTodos = computed(() => {
             <input type="checkbox" v-model="todo.isCompleted" @change="() => updateLocalStorage()" />
             {{ todo.title }}
           </label>
-          <button @click="editTodo(todo.id)">✍️</button>
-          <button @click="deleteTodo(todo.id)">❌</button>
+          <section>
+            <button @click="editTodo(todo.id)">✍️</button>
+            <button @click="deleteTodo(todo.id)">❌</button>
+          </section>
         </li>
       </ul>
     </section>
@@ -130,9 +132,16 @@ const filteredTodos = computed(() => {
 </template>
 
 <style scoped>
+* {
+  box-sizing: border-box;
+}
 section {
   max-width: 480px;
   margin: 0 auto;
+
+  input {
+    padding: 4px;
+  }
 
   form {
     input {
@@ -140,6 +149,22 @@ section {
     }
 
     button {
+    }
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+
+    li + li {
+      margin-top: 8px;
+    }
+
+    li {
+      display: flex;
+      label {
+        flex: 1;
+      }
     }
   }
 }
