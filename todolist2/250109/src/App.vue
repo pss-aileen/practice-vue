@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, type Ref } from 'vue';
+import { ref, watch, type Ref } from 'vue';
 
 /*
   基本のTODO作成
@@ -17,22 +17,30 @@ const inputTitle = ref('');
 type TodoType = {
   id: number;
   title: string;
+  isCompleted: boolean;
 };
 
 // Todosの準備
 const todos: Ref<TodoType[]> = ref([]);
+
+const localStorageValue = localStorage.getItem('myTodo');
+if (localStorageValue) {
+  todos.value = JSON.parse(localStorageValue);
+}
 
 // 追加機能
 function addTodo() {
   const todo: TodoType = {
     id: new Date().getTime(),
     title: inputTitle.value,
+    isCompleted: false,
   };
 
   todos.value.push(todo);
   inputTitle.value = '';
 
   console.table(todos.value);
+  updateLocalStorage();
 }
 
 // 削除機能
@@ -40,6 +48,7 @@ function deleteTodo(id: number) {
   todos.value = todos.value.filter((todo) => todo.id !== id);
 
   console.table(todos.value);
+  updateLocalStorage();
 }
 
 // 編集機能
@@ -59,7 +68,17 @@ function editTodo(id: number) {
         return todo;
       });
       console.table(todos.value);
+      updateLocalStorage();
     }
+  }
+}
+
+// save on localStorage
+function updateLocalStorage() {
+  localStorage.setItem('myTodo', JSON.stringify(todos.value));
+  const localStorageValue = localStorage.getItem('myTodo');
+  if (localStorageValue) {
+    console.log(JSON.parse(localStorageValue));
   }
 }
 </script>
@@ -75,7 +94,10 @@ function editTodo(id: number) {
 
     <ul v-if="todos.length !== 0">
       <li v-for="todo in todos" :key="todo.id">
-        {{ todo.title }}
+        <label>
+          <input type="checkbox" v-model="todo.isCompleted" @change="() => updateLocalStorage()" />
+          {{ todo.title }}
+        </label>
         <button @click="editTodo(todo.id)">✍️</button>
         <button @click="deleteTodo(todo.id)">❌</button>
       </li>
