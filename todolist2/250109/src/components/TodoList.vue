@@ -27,7 +27,7 @@ const emit = defineEmits<{
             {{ todo.category }}
           </span>
           <button @click="() => emit('edit-todo', todo.id)">✍️</button>
-          <button @click="() => emit('delete-todo', todo.id)">❌</button>
+          <button @click="() => emit('delete-todo', todo.id)">🗑️</button>
         </section>
       </li>
     </ul>

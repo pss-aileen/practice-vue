@@ -4,6 +4,7 @@ import InputForm from './components/InputForm.vue';
 import FilterSetting from './components/FilterSetting.vue';
 import TodoList from './components/TodoList.vue';
 import type { categoryType, currentFilterType, TodoType } from './types';
+import CategoryInput from './components/CategoryInput.vue';
 
 // Todosの準備
 const todos: Ref<TodoType[]> = ref([]);
@@ -99,6 +100,7 @@ const filteredTodos = computed(() => {
       </main>
       <aside>
         <FilterSetting @update-current-filter="updateCurrentFilter" :current-filter="currentFilter" />
+        <CategoryInput />
       </aside>
     </div>
   </section>
@@ -124,6 +126,10 @@ const filteredTodos = computed(() => {
 
     aside {
       flex: 1;
+
+      & > * + * {
+        margin-top: 32px;
+      }
     }
   }
 }

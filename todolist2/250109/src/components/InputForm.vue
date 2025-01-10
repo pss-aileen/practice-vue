@@ -32,17 +32,6 @@ function handleSubmit() {
 <style scoped>
 form {
   margin-top: 16px;
-  input {
-    padding: 4px;
-    width: 100%;
-  }
 
-  select {
-    padding: 4px;
-  }
-
-  button {
-    padding: 4px;
-  }
 }
 </style>

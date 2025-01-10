@@ -7,3 +7,16 @@ h2,
 p {
   margin: 0;
 }
+
+input[type='text'] {
+  padding: 4px;
+  width: 100%;
+}
+
+select {
+  padding: 4px;
+}
+
+button {
+  padding: 4px;
+}
