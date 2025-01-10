@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch, type Ref } from 'vue';
+import { computed, ref, watch, type Ref } from 'vue';
 
 /*
   基本のTODO作成
@@ -81,6 +81,19 @@ function updateLocalStorage() {
     console.log(JSON.parse(localStorageValue));
   }
 }
+
+const currentFilter: Ref<'all' | 'incompleted' | 'completed'> = ref('all');
+
+const filteredTodos = computed(() => {
+  if (currentFilter.value === 'incompleted') {
+    return todos.value.filter((todo) => !todo.isCompleted);
+  }
+  if (currentFilter.value === 'completed') {
+    return todos.value.filter((todo) => todo.isCompleted);
+  }
+
+  return todos.value;
+});
 </script>
 
 <template>
@@ -92,16 +105,27 @@ function updateLocalStorage() {
       <button>add</button>
     </form>
 
-    <ul v-if="todos.length !== 0">
-      <li v-for="todo in todos" :key="todo.id">
-        <label>
-          <input type="checkbox" v-model="todo.isCompleted" @change="() => updateLocalStorage()" />
-          {{ todo.title }}
-        </label>
-        <button @click="editTodo(todo.id)">✍️</button>
-        <button @click="deleteTodo(todo.id)">❌</button>
-      </li>
-    </ul>
+    <section>
+      <h2>setting</h2>
+      <button @click="() => (currentFilter = 'completed')" :disabled="currentFilter === 'completed'">完了のみ</button>
+      <button @click="() => (currentFilter = 'incompleted')" :disabled="currentFilter === 'incompleted'">未完了のみ</button>
+      <button @click="() => (currentFilter = 'all')" :disabled="currentFilter === 'all'">全部</button>
+    </section>
+
+    <section>
+      <h2>todos</h2>
+
+      <ul v-if="filteredTodos.length !== 0">
+        <li v-for="todo in filteredTodos" :key="todo.id">
+          <label>
+            <input type="checkbox" v-model="todo.isCompleted" @change="() => updateLocalStorage()" />
+            {{ todo.title }}
+          </label>
+          <button @click="editTodo(todo.id)">✍️</button>
+          <button @click="deleteTodo(todo.id)">❌</button>
+        </li>
+      </ul>
+    </section>
   </section>
 </template>
 
