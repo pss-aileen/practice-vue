@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import type { currentFilterType } from '../types';
+import type { categoryType, currentFilterType } from '../types';
 
 const props = defineProps<{
   currentFilter: currentFilterType;
+  categories: categoryType[];
 }>();
 
 const emit = defineEmits<{
@@ -22,6 +23,11 @@ function handleClick(filterName: currentFilterType) {
       <li><button @click="handleClick('all')" :disabled="props.currentFilter === 'all'">全部</button></li>
       <li><button @click="handleClick('completed')" :disabled="props.currentFilter === 'completed'">完了のみ</button></li>
       <li><button @click="handleClick('incompleted')" :disabled="props.currentFilter === 'incompleted'">未完了のみ</button></li>
+      <li v-for="category in props.categories" :key="category.id">
+        <button @click="handleClick(category.id)" :disabled="props.currentFilter === category.id">
+          {{ category.title }}
+        </button>
+      </li>
     </ul>
   </section>
 </template>

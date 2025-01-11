@@ -6,7 +6,7 @@ import TodoList from './components/TodoList.vue';
 import type { categoryType, currentFilterType, TodoType } from './types';
 import CategoryInput from './components/CategoryInput.vue';
 
-/* 
+/*
   TODOS
 */
 
@@ -73,7 +73,7 @@ function updateLocalStorage() {
   }
 }
 
-/* 
+/*
   CATEGORIES
 */
 
@@ -131,7 +131,7 @@ function updateCategoriesLocalStorage() {
     console.log(JSON.parse(localStorageCategoriesValue));
   }
 }
-/* 
+/*
   FILTER
 */
 const currentFilter: Ref<currentFilterType> = ref('all');
@@ -146,6 +146,12 @@ const filteredTodos = computed(() => {
   }
   if (currentFilter.value === 'completed') {
     return todos.value.filter((todo) => todo.isCompleted);
+  }
+
+  for (let i = 0; i < categories.value.length; i++) {
+    if (currentFilter.value === categories.value[i].id) {
+      return todos.value.filter((todo) => todo.categoryId === categories.value[i].id);
+    }
   }
 
   return todos.value;
@@ -164,7 +170,7 @@ const filteredTodos = computed(() => {
         <TodoList :todos="filteredTodos" :categories="categories" @edit-todo="editTodo" @delete-todo="deleteTodo" @update-localstorage="updateLocalStorage" />
       </main>
       <aside>
-        <FilterSetting @update-current-filter="updateCurrentFilter" :current-filter="currentFilter" />
+        <FilterSetting @update-current-filter="updateCurrentFilter" :current-filter="currentFilter" :categories="categories" />
         <CategoryInput :categories="categories" @add-category="addCategory" @edit-category="editCategory" @delete-category="deleteCategory" @update-category="updateCategoriesLocalStorage" />
       </aside>
     </div>

@@ -5,7 +5,7 @@ export type TodoType = {
   categoryId: number;
 };
 
-export type currentFilterType = 'all' | 'incompleted' | 'completed';
+export type currentFilterType = string | number;
 
 export type categoryType = {
   id: number;
