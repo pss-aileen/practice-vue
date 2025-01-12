@@ -1,7 +1,13 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { useCounterStore } from '@/stores/counter'
+const counter = useCounterStore()
+
+counter.increment()
+</script>
 
 <template>
-  <div></div>
+  <div>Current Count: {{ counter.count }}</div>
+  <button @click="counter.increment">increment</button>
 </template>
 
 <style scoped></style>
