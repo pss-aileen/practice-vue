@@ -7,6 +7,7 @@ counter.increment()
 
 <template>
   <div>Current Count: {{ counter.count }}</div>
+  <div>{{ counter.double }}</div>
   <button @click="counter.increment">increment</button>
 </template>
 
