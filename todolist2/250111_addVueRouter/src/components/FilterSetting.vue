@@ -1,17 +1,13 @@
 <script setup lang="ts">
-import type { categoryType, currentFilterType } from '../types';
+import { useTodoCategories } from '../stores/category';
+import { useTodosFilter } from '../stores/filter';
+import type { currentFilterType } from '../types';
 
-const props = defineProps<{
-  currentFilter: currentFilterType;
-  categories: categoryType[];
-}>();
-
-const emit = defineEmits<{
-  (e: 'update-current-filter', filterName: currentFilterType): void;
-}>();
+const categories = useTodoCategories();
+const filter = useTodosFilter();
 
 function handleClick(filterName: currentFilterType) {
-  emit('update-current-filter', filterName);
+  filter.updateCurrentFilter(filterName);
 }
 </script>
 
@@ -20,11 +16,11 @@ function handleClick(filterName: currentFilterType) {
     <h2>Filter</h2>
 
     <ul>
-      <li><button @click="handleClick('all')" :disabled="props.currentFilter === 'all'">全部</button></li>
-      <li><button @click="handleClick('completed')" :disabled="props.currentFilter === 'completed'">完了のみ</button></li>
-      <li><button @click="handleClick('incompleted')" :disabled="props.currentFilter === 'incompleted'">未完了のみ</button></li>
-      <li v-for="category in props.categories" :key="category.id">
-        <button @click="handleClick(category.id)" :disabled="props.currentFilter === category.id">
+      <li><button @click="handleClick('all')" :disabled="filter.currentFilter === 'all'">全部</button></li>
+      <li><button @click="handleClick('completed')" :disabled="filter.currentFilter === 'completed'">完了のみ</button></li>
+      <li><button @click="handleClick('incompleted')" :disabled="filter.currentFilter === 'incompleted'">未完了のみ</button></li>
+      <li v-for="category in categories.categories" :key="category.id">
+        <button @click="handleClick(category.id)" :disabled="filter.currentFilter === category.id">
           {{ category.title }}
         </button>
       </li>

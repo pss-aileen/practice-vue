@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 import type { TodoType } from '../types';
+import { useTodosFilter } from './filter';
 
 export const useTodosStore = defineStore('todos', {
   state: () => {
@@ -14,18 +15,19 @@ export const useTodosStore = defineStore('todos', {
       return JSON.stringify(state.todos);
     },
     filteredTodos(state) {
-      // if (currentFilter.value === 'incompleted') {
-      //   return this.todos.filter((todo) => !todo.isCompleted);
-      // }
-      // if (currentFilter.value === 'completed') {
-      //   return this.todos.filter((todo) => todo.isCompleted);
-      // }
+      const filter = useTodosFilter();
+      if (filter.currentFilter === 'incompleted') {
+        return state.todos.filter((todo) => !todo.isCompleted);
+      }
+      if (filter.currentFilter === 'completed') {
+        return state.todos.filter((todo) => todo.isCompleted);
+      }
 
-      // for (let i = 0; i < categories.value.length; i++) {
-      //   if (currentFilter.value === categories.value[i].id) {
-      //     return this.todos.filter((todo) => todo.categoryId === categories.value[i].id);
-      //   }
-      // }
+      for (let i = 0; i < filter.categoryFilter.length; i++) {
+        if (filter.currentFilter === filter.categoryFilter[i].filterName) {
+          return state.todos.filter((todo) => todo.categoryId === filter.categoryFilter[i].filterName);
+        }
+      }
       return state.todos;
     },
   },
@@ -50,12 +52,6 @@ export const useTodosStore = defineStore('todos', {
       console.table(this.todos);
       this.saveLocalStorageData();
     },
-    deleteTodo(id: number) {
-      this.todos = this.todos.filter((todo) => todo.id !== id);
-
-      console.table(this.todos);
-      this.saveLocalStorageData();
-    },
     editTodo(id: number) {
       const currentTodo = this.todos.filter((todo) => {
         return todo.id === id;
@@ -75,6 +71,12 @@ export const useTodosStore = defineStore('todos', {
           this.saveLocalStorageData();
         }
       }
+    },
+    deleteTodo(id: number) {
+      this.todos = this.todos.filter((todo) => todo.id !== id);
+
+      console.table(this.todos);
+      this.saveLocalStorageData();
     },
   },
 });

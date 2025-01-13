@@ -1,32 +1,24 @@
 <script setup lang="ts">
-import { onMounted } from 'vue';
-import type { categoryType } from '../types';
 import { useTodosStore } from '../stores/todos';
+import { useTodoCategories } from '../stores/category';
 
 const todos = useTodosStore();
-
-const props = defineProps<{
-  categories: categoryType[];
-}>();
-
-onMounted(() => {
-  console.log(props.categories[0].title);
-});
+const categories = useTodoCategories();
 </script>
 
 <template>
   <section class="todos">
     <h2>Todos</h2>
 
-    <ul v-if="todos.todos.length !== 0">
-      <li v-for="todo in todos.todos" :key="todo.id">
+    <ul v-if="todos.filteredTodos.length !== 0">
+      <li v-for="todo in todos.filteredTodos" :key="todo.id">
         <label>
           <input type="checkbox" v-model="todo.isCompleted" @change="() => todos.saveLocalStorageData()" />
           {{ todo.title }}
         </label>
         <section>
           <span>
-            {{ props.categories.find((item) => item.id === todo.categoryId)?.title }}
+            {{ categories.categories.find((item) => item.id === todo.categoryId)?.title }}
           </span>
           <button @click="() => todos.editTodo(todo.id)">✍️</button>
           <button @click="() => todos.deleteTodo(todo.id)">🗑️</button>
