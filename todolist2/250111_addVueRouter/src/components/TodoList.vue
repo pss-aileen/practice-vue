@@ -25,11 +25,15 @@ const categories = useTodoCategories();
         </section>
       </li>
     </ul>
+    <p v-else>There is no todos.</p>
   </section>
 </template>
 
 <style scoped>
 .todos {
+  p {
+    margin-top: 16px;
+  }
   ul {
     list-style: none;
     padding: 0;

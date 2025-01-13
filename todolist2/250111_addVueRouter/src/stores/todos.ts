@@ -16,6 +16,7 @@ export const useTodosStore = defineStore('todos', {
     },
     filteredTodos(state) {
       const filter = useTodosFilter();
+      
       if (filter.currentFilter === 'incompleted') {
         return state.todos.filter((todo) => !todo.isCompleted);
       }
