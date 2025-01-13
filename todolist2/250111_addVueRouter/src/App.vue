@@ -10,7 +10,7 @@ import { RouterLink } from 'vue-router';
 
     <nav>
       <RouterLink to="/">home</RouterLink>
-      <RouterLink to="/single-todo">single-todo</RouterLink>
+      <!-- <RouterLink to="/single-todo">single-todo</RouterLink> -->
     </nav>
 
     <div>

@@ -22,6 +22,7 @@ const categories = useTodoCategories();
           </span>
           <button @click="() => todos.editTodo(todo.id)">✍️</button>
           <button @click="() => todos.deleteTodo(todo.id)">🗑️</button>
+          <RouterLink :to="'/single-todo/' + todo.id">link</RouterLink>
         </section>
       </li>
     </ul>

@@ -16,7 +16,7 @@ export const useTodosStore = defineStore('todos', {
     },
     filteredTodos(state) {
       const filter = useTodosFilter();
-      
+
       if (filter.currentFilter === 'incompleted') {
         return state.todos.filter((todo) => !todo.isCompleted);
       }
@@ -30,6 +30,17 @@ export const useTodosStore = defineStore('todos', {
         }
       }
       return state.todos;
+    },
+    getSingleTodo(state) {
+      return (id: string | string[]) =>
+        state.todos.find((todo) => {
+          if (Array.isArray(id) && Number(id[0]) === todo.id) {
+            return todo;
+          }
+          if (!Array.isArray(id) && Number(id) === todo.id) {
+            return todo;
+          }
+        });
     },
   },
   actions: {

@@ -8,7 +8,7 @@ import { createPinia } from 'pinia';
 
 const routes = [
   { path: '/', component: HomeView },
-  { path: '/single-todo', component: SingleTodo },
+  { path: '/single-todo/:id', component: SingleTodo },
 ];
 
 const router = createRouter({
