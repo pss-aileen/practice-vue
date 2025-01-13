@@ -10,7 +10,6 @@ const inputTitle: Ref<string> = ref('');
 const inputCategoryId: Ref<number> = ref(categories.categories[0].id);
 
 function handleSubmit() {
-  // emit('add-todo', inputTitle.value, inputCategoryId.value);
   toods.addTodo(inputTitle.value, inputCategoryId.value);
   inputTitle.value = '';
 }

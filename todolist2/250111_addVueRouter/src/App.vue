@@ -1,20 +1,9 @@
 <script setup lang="ts">
-import { computed, ref, type Ref } from 'vue';
 import InputForm from './components/InputForm.vue';
 import FilterSetting from './components/FilterSetting.vue';
 import TodoList from './components/TodoList.vue';
 import CategoryInput from './components/CategoryInput.vue';
 import { RouterLink } from 'vue-router';
-import { useTodosStore } from './stores/todos';
-import { useTodoCategories } from './stores/category';
-import type { currentFilterType } from './types';
-
-/*
-  TODOS
-*/
-
-const todos = useTodosStore();
-const categories = useTodoCategories();
 </script>
 
 <template>
