@@ -4,6 +4,7 @@ import App from './App.vue';
 import HomeView from './HomeView.vue';
 import SingleTodo from './SingleTodo.vue';
 import { createRouter, createWebHistory } from 'vue-router';
+import { createPinia } from 'pinia';
 
 const routes = [
   { path: '/', component: HomeView },
@@ -15,4 +16,6 @@ const router = createRouter({
   routes,
 });
 
-createApp(App).use(router).mount('#app');
+const pinia = createPinia();
+
+createApp(App).use(pinia).use(router).mount('#app');

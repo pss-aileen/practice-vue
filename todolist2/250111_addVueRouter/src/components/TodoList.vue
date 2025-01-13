@@ -1,16 +1,12 @@
 <script setup lang="ts">
 import { onMounted } from 'vue';
-import type { categoryType, TodoType } from '../types';
+import type { categoryType } from '../types';
+import { useTodosStore } from '../stores/todos';
+
+const todos = useTodosStore();
 
 const props = defineProps<{
-  todos: TodoType[];
   categories: categoryType[];
-}>();
-
-const emit = defineEmits<{
-  (e: 'edit-todo', id: number): void;
-  (e: 'delete-todo', id: number): void;
-  (e: 'update-localstorage'): void;
 }>();
 
 onMounted(() => {
@@ -22,18 +18,18 @@ onMounted(() => {
   <section class="todos">
     <h2>Todos</h2>
 
-    <ul v-if="props.todos.length !== 0">
-      <li v-for="todo in props.todos" :key="todo.id">
+    <ul v-if="todos.todos.length !== 0">
+      <li v-for="todo in todos.todos" :key="todo.id">
         <label>
-          <input type="checkbox" v-model="todo.isCompleted" @change="() => emit('update-localstorage')" />
+          <input type="checkbox" v-model="todo.isCompleted" @change="() => todos.saveLocalStorageData()" />
           {{ todo.title }}
         </label>
         <section>
           <span>
             {{ props.categories.find((item) => item.id === todo.categoryId)?.title }}
           </span>
-          <button @click="() => emit('edit-todo', todo.id)">✍️</button>
-          <button @click="() => emit('delete-todo', todo.id)">🗑️</button>
+          <button @click="() => todos.editTodo(todo.id)">✍️</button>
+          <button @click="() => todos.deleteTodo(todo.id)">🗑️</button>
         </section>
       </li>
     </ul>
