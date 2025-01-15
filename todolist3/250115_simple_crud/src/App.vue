@@ -9,6 +9,7 @@ import { onMounted, ref, watch, type Ref } from 'vue'
 interface todosType {
   id: number
   title: string
+  isCompleted: boolean
 }
 
 const todos: Ref<todosType[]> = ref([])
@@ -22,6 +23,7 @@ function addTodo() {
   todos.value.push({
     id: new Date().getTime(),
     title: todoTitleInput.value,
+    isCompleted: false,
   })
 
   todoTitleInput.value = ''
@@ -82,7 +84,10 @@ watch(
       <h2>List</h2>
       <ul>
         <li v-for="todo in todos" :key="todo.id">
-          <div>{{ todo.title }}</div>
+          <div>
+            <input type="checkbox" v-model="todo.isCompleted" />
+            {{ todo.title }}
+          </div>
           <div>
             <button @click="editTodo(todo.id)">edit</button>
             <button @click="deleteTodo(todo.id)">delete</button>
