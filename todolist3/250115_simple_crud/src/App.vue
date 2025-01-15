@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref, type Ref } from 'vue'
+import { onMounted, ref, watch, type Ref } from 'vue'
 
 /*
   - 要素を作ってイメージを作る
@@ -25,7 +25,6 @@ function addTodo() {
   })
 
   todoTitleInput.value = ''
-  updateLocalStorage()
 }
 
 function editTodo(id: number) {
@@ -40,26 +39,32 @@ function editTodo(id: number) {
     }
     return todo
   })
-  updateLocalStorage()
 }
 
 function deleteTodo(id: number) {
   todos.value = todos.value.filter((todo) => {
     return todo.id !== id
   })
-  updateLocalStorage()
-}
-
-function updateLocalStorage() {
-  localStorage.setItem('myTodos', JSON.stringify(todos.value))
 }
 
 onMounted(() => {
+  // コンポーネントが用意されたら、todoを読み込んで反映する
   const localStorageTodos = localStorage.getItem('myTodos')
   if (localStorageTodos) {
     todos.value = JSON.parse(localStorageTodos)
   }
 })
+
+watch(
+  todos,
+  (newTodos) => {
+    localStorage.setItem('myTodos', JSON.stringify(newTodos))
+  },
+  {
+    // trueにすることで、オブジェクトの変更まで見てくれる
+    deep: true,
+  },
+)
 </script>
 
 <template>
